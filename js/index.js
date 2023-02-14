@@ -63,7 +63,7 @@ function handleClick(selectedDish, unwantedDish) {
 
 // Shows chosen recipe
 function end(dish) {
-    // clear container and styling
+    // Clear container and styling
     containerEl.innerHTML = null;
     containerEl.style.color = "bisque";
     containerEl.style.flexDirection = "column";
@@ -84,7 +84,7 @@ function end(dish) {
     containerEl.appendChild(buttonEl);
 }
 
-// filters measures and ingredients
+// Filters measures and ingredients
 function getIngredients(dish) {
     var measures = Object.keys(dish).filter(function (measure) {
         return measure.startsWith("strMeasure") && dish[measure];
@@ -112,5 +112,5 @@ function getInstructions(dish) {
     return insEl;
 }
 
-startup()
+startup();
 
