@@ -1,0 +1,34 @@
+* {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+body {
+    background-color: #354259;
+    text-align: center;
+}
+
+#container {
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0rem;
+}
+
+.dish {
+    width: 50%;
+    background-color: cornsilk;
+    border-radius: 10px;
+    font-size: larger;
+    box-shadow: 10px 10px 10px 10px #354259;
+}
+
+.dish img {
+    width: 75%;
+    border-radius: 10px;
+}
+
+.dish:hover {
+    background-color: rgb(96, 96, 96);
+    color: white;
+}
