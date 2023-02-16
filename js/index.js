@@ -113,5 +113,4 @@ function getInstructions(dish) {
 }
 
 startup();
-console.log("test");
 
