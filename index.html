@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>This or that</title>
+        <title>Recipe Feud</title>
         <meta charset="UTF-8">
         <meta name="Author" content="Anton Tin Phan">
         <!-- Imported font from google fonts -->
@@ -11,15 +11,17 @@
         <script src="js/index.js" defer></script>
     </head>
     <body>
-        <h1 style="color:bisque">This or that</h1>
-        <div id="container">
-            <div class="dish" id="xDish">
-                <h3 id="xName"></h3>
-                <img id="xImg">
+        <div id="console">
+            <h1>Recipe Feud</h1>
+            <h2 id="numIngredients">Ingredients left: 4</h2>
+            <div>
+                <h2 id="playerTurn">Turn: Player 1</h2>
             </div>
-            <div class="dish" id="yDish">
-                <h3 id="yName"></h3>
-                <img id="yImg">
+        </div>
+        <div id="container">
+            <div id="dishDisplay"></div>
+            <div id="ingredientsDisplay">
+                <h1>Pick a ingredient!</h1>
             </div>
         </div>
     </body>

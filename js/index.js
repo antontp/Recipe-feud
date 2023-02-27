@@ -1,115 +1,71 @@
-const api_url = 'https://www.themealdb.com/api/json/v1/1/random.php';
-var dishes = [];
-var tries = parseInt((Math.random() * 10) + 5);
+const api_url_dish = 'https://www.themealdb.com/api/json/v1/1/random.php';
+const api_url_ingredients = 'https://www.themealdb.com/api/json/v1/1/list.php?i=list';
+// player 1 == true
+// player 2 == false
+var playerSwitch = true;
 
 // Fetching DOM objects
 const containerEl = document.getElementById("container");
-const x = {
-    container: document.getElementById("xDish"),
-    name: document.getElementById("xName"),
-    image: document.getElementById("xImg"),
-    dish: {}
-};
-const y = {
-    container: document.getElementById("yDish"),
-    name: document.getElementById("yName"),
-    image: document.getElementById("yImg"),
-    dish: {}
-};
+const playerTurnEl = document.getElementById("playerTurn");
+const dishDisplayEl = document.getElementById("dishDisplay");
+const ingredientsDisplayEl = document.getElementById("ingredientsDisplay")
 
 // Fetches data (promise => data)
-async function fetchData() {
+async function fetchData(api_url) {
     return fetch(api_url)
         .then(async (promise) => await promise.json())
-        .then((data) => data.meals[0])
-}
-
-// Post meals to HTML
-function postMeal(dish, meal) {
-    dish.name.innerHTML = meal.strMeal;
-    dish.image.src = meal.strMealThumb;
-    dish.dish = meal;
-    // TODO: Catch error
-}
-
-// Fills dishes to always have 3 dishes
-async function fillDishes() {
-    while (dishes.length < 3) {
-        dishes.unshift(await fetchData());
-    }
+        .then((data) => data.meals)
+        .catch(error => console.log(error))
 }
 
 // startup function
 async function startup() {
-    // Fetching dishes
-    await fillDishes()
-    // Posting to html
-    postMeal(x, dishes.pop());
-    postMeal(y, dishes.pop());
+    // Fetching ingredients
+    const allIngredients = await fetchData(api_url_ingredients);
+    postIngredients(allIngredients);
+    console.log(allIngredients);
+    // console.log(allIngredients.find(o => o.strIngredient == "Salmon"));
 
-    //Adding onClick events
-    x.container.addEventListener("click", () => {handleClick(x, y)});
-    y.container.addEventListener("click", () => {handleClick(y, x)});
-}
-
-//Handle click
-function handleClick(selectedDish, unwantedDish) {
-    postMeal(unwantedDish, dishes.pop());
-    fillDishes();
-    tries--;
-    console.log(tries);
-    if (tries == 0) end(selectedDish);
-}
-
-// Shows chosen recipe
-function end(dish) {
-    // Clear container and styling
-    containerEl.innerHTML = null;
-    containerEl.style.color = "bisque";
-    containerEl.style.flexDirection = "column";
-    containerEl.style.alignItems = "center";
-    containerEl.style.gap = "0";
-
-    dish.image.width = "500";
-
-    containerEl.appendChild(dish.name);
-    containerEl.appendChild(dish.image);
-    containerEl.appendChild(getIngredients(dish.dish));
-    containerEl.appendChild(getInstructions(dish.dish));
-    
-    // Reload button
-    var buttonEl = document.createElement("button");
-    buttonEl.innerHTML = "Pick again";
-    buttonEl.onclick = () => location.reload();
-    containerEl.appendChild(buttonEl);
+    // Fetching dish
+    const dish = await fetchData(api_url_dish).then(data => data[0]);
+    const dish_ingredients = filterIngredients(dish);
+    postDish(dish);
+    console.log(dish_ingredients);
+    console.log(dish)
 }
 
 // Filters measures and ingredients
-function getIngredients(dish) {
-    var measures = Object.keys(dish).filter(function (measure) {
-        return measure.startsWith("strMeasure") && dish[measure];
-    })
-    var ingredients = Object.keys(dish).filter(function (ingredient) {
-        return ingredient.startsWith("strIngredient") && dish[ingredient];
-    })
-    
-    var listEl = document.createElement("ul");
-    for (let i = 0; i < ingredients.length; i++) {
-        var liEl = document.createElement("li");
-        liEl.innerHTML = dish[measures[i]] + " - " + dish[ingredients[i]];
-        listEl.appendChild(liEl);
-    }
-    console.log(measures);
-    console.log(ingredients)
-    return listEl;
+function filterIngredients(dish) {
+    return Object.keys(dish)
+        .filter(function (ingredient) {
+            return ingredient.startsWith("strIngredient") && dish[ingredient];
+        })
+        .map(key => {
+            return dish[key]
+        })
+        .sort();
 }
 
-// Formats instructions
-function getInstructions(dish) {
-    var instructions = dish.strInstructions;
-    var insEl = document.createElement("p");
-    insEl.innerHTML = instructions.replaceAll('.', ".<br>");
-    return insEl;
+function postDish(dish) {
+    var nameEl = document.createElement("h1");
+    nameEl.innerHTML = dish.strMeal;
+    
+    var imageEl = document.createElement("img");
+    imageEl.src = dish.strMealThumb;
+    imageEl.width = 400;
+    imageEl.height = 400;
+
+    dishDisplayEl.appendChild(nameEl);
+    dishDisplayEl.appendChild(imageEl);
+}
+function postIngredients(ingredients) {
+    ingredients.forEach(ingredient => {        
+        let buttonEl = document.createElement("button");
+        buttonEl.id = "ingredientButton";
+        buttonEl.value = ingredient.strIngredient;
+        buttonEl.innerHTML = ingredient.strIngredient;
+        ingredientsDisplayEl.appendChild(buttonEl);
+    })
 }
 
 startup();

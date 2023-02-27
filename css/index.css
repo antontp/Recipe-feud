@@ -1,5 +1,6 @@
 * {
     font-family: 'Ubuntu', sans-serif;
+    color: bisque;
 }
 
 body {
@@ -7,12 +8,46 @@ body {
     text-align: center;
 }
 
-#container {
-    overflow: auto;
+#console {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
-    gap: 0rem;
+    align-items: center;
+}
+
+#playerTurn {
+    border: bisque solid 2px;
+    padding: 1rem;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2rem;
+    margin-right: 2rem;
+
+    gap: 5rem;
+}
+
+#ingredientDisplay {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#ingredientButton {
+    color:rgb(96, 96, 96);
+    
+    padding: 1rem;
+    border-radius: 20px;
+
+    text-align: justify;
+    justify-content: center;
+
+    font-weight: bold;
+}
+
+#ingredientButton:hover {
+    background-color: bisque;
+    color: #354259;
 }
 
 .dish {
@@ -21,14 +56,4 @@ body {
     border-radius: 10px;
     font-size: larger;
     box-shadow: 10px 10px 10px 10px #354259;
-}
-
-.dish img {
-    width: 75%;
-    border-radius: 10px;
-}
-
-.dish:hover {
-    background-color: rgb(96, 96, 96);
-    color: white;
 }
