@@ -12,12 +12,18 @@
         <script src="index.js" defer></script>
     </head>
     <body>
-        <h1>Recipe Feud</h1>
-        <div id="lobby">
-            <!-- <button class="gameMode" id="host">Host game</button> -->
-            <button class="gameMode" id="join" onClick="startClient()">Join game</button>
+        <div id="console">
+            <h1>Recipe Feud</h1>
+            <h2 id="numIngredients">Ingredients left: 4</h2>
+            <div>
+                <h2 id="playerTurn">Turn: Player 1</h2>
+            </div>
         </div>
-        <h3 id="feedback"></h3>
-        <div id="ingredientsDisplay"></div>
+        <div id="container">
+            <div id="dishDisplay"></div>
+            <div id="ingredientsDisplay">
+                <h1>Pick a ingredient!</h1>
+            </div>
+        </div>
     </body>
 </html>
