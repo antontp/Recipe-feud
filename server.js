@@ -7,13 +7,16 @@ const express = require("express");
 const path = require("path");
 const http = require("http");
 const socketio = require("socket.io");
-const { isPromise } = require("util/types");
 
 // Init server and socket
 const PORT = 3000;
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+
+// Gamedata
+const ingredients = []
+const dish = {}
 
 // State variables
 var gameState = "";
@@ -22,22 +25,14 @@ var gameDataFetched = false;
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
 
-// Fetching data
-// Start server (only if we have loaded gamedata)
-const ingredients = fetchData(api_url_ingredients);
-const dish = fetchData(api_url_dish);
-
-// (async () => {
-//     ingredients.concat(await fetchData(api_url_ingredients));
-//     dish.concat(await fetchData(api_url_dish));
-// })
-
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-console.log(dish);
-console.log(ingredients);
-
-// server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+// Fetches game data and starts server
+fetchData(api_url_ingredients)
+.then(dataIngredients => ingredients.push(...dataIngredients))
+.then(() => fetchData(api_url_dish))
+.then(gameDish => Object.assign(dish, gameDish[0]))
+.finally(
+    server.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+);
 
 // Handle socket request from client
 const connections = [null, null];
@@ -64,20 +59,12 @@ io.on("connection", socket => {
     socket.emit("game-data", ingredients, dish);
 });
 
-
 // Fetches data (promise => data)
 async function fetchData(api_url) {
     return fetch(api_url)
         .then(async (promise) => await promise.json())
         .then((data) => data.meals)
         .catch(error => console.log(error))
-}
-
-async function loadIngredients() {
-    return fetchData(api_url_ingredients);
-}
-async function loadDish() {
-    return fetchData(api_url_dish);
 }
 
 // // startup function
