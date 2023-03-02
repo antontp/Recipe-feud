@@ -1,8 +1,9 @@
-# Pick a meal! (This or that)
+# Recipe Feud!
 
 ## Description
-Pick the dish you want to keep. After a random amount of picks, you end up with a random dish!
-The recipe will show with all the ingredients and instructions that you need!
+There are two players. A dish is randomly chosen. Each player has to take turns listing all the ingredients the chosen dish contains.
+
+The player who got guesses the most ingredients right wins!
 
 ## API Source
 [Source](https://www.themealdb.com/)

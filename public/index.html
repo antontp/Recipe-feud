@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Recipe Feud</title>
+        <meta charset="UTF-8">
+        <meta name="Author" content="Anton Tin Phan">
+        <!-- Imported font from google fonts -->
+        <style> @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;700&display=swap'); </style>
+        <link rel="stylesheet" text="text/css" href="index.css">
+        <!-- Loading Script -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="index.js" defer></script>
+    </head>
+    <body>
+        <div id="console">
+            <h1>Recipe Feud</h1>
+            <h2 id="numIngredients">Ingredients left: 4</h2>
+            <div>
+                <h2 id="playerTurn">Turn: Player 1</h2>
+            </div>
+        </div>
+        <div id="container">
+            <div id="dishDisplay"></div>
+            <div id="ingredientsDisplay">
+                <h1>Pick a ingredient!</h1>
+            </div>
+        </div>
+    </body>
+</html>
