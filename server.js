@@ -97,12 +97,14 @@ io.on("connection", socket => {
     socket.on("ingredient-guess", guess => {
         console.log(`player ${playerTurn} guessed ${guess}`);
         // Notify players about answer
-        io.emit("ingredient-answer", playerTurn, dishIngredients.includes(guess));
+        io.emit("ingredient-answer", playerTurn, dishIngredients.includes(guess), guess);
 
         // Removes ingredient from the ingredient dish list if correct
         if (dishIngredients.includes(guess)) {
             dishIngredients.splice(dishIngredients.indexOf(guess), 1);
             io.emit("ingredients-left", dishIngredients.length);
+
+            // Check if there is ingredients left; if not => end game show results
         }
 
         // Change player turn

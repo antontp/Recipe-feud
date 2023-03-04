@@ -104,12 +104,18 @@ function notMyTurn() {
     playerTurnEl.innerHTML = `Turn: Player ${otherPlayerNum}`;
 
     // Handle display if the other player answers right
-    socket.once("ingredient-answer", (playerNumber, answer) => {
+    socket.once("ingredient-answer", (playerNumber, answer, guess) => {
         if (otherPlayerNum == playerNumber)
             console.log(`${otherPlayerNum} guessed and it was ${answer}!`);
+
         if (otherPlayerNum == playerNumber && answer) {
             otherScore++;
             otherScoreEl.innerHTML = `Other: ${otherScore} points`;
+            
+            // Removing used button
+            ingredientButtons.forEach(button => {
+                if (button.value == guess) button.remove();
+            })
         }
     });
 }
@@ -120,11 +126,13 @@ function handleTurn(button) {
     socket.emit("ingredient-guess", button.value);
 
     // Listen if the answer is right or wrong
-    socket.once("ingredient-answer", (playerNumber, answer) => {
+    socket.once("ingredient-answer", (playerNumber, answer, guess) => {
         console.log(`${playerNumber}: ${button.value} was ${answer}!`);
         if (playerNumber == playerNum && answer) {
             score++;
             myScoreEl.innerHTML = `You: ${score} points`;
+            // Removing used button
+            button.remove();
         }
     });
 }
