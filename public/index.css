@@ -23,3 +23,27 @@ body {
     background-color: bisque;
     color: black;
 }
+
+#game {
+    justify-content: space-between;
+    align-items: center;
+}
+
+#playerTurn {
+    border: bisque solid 2px;
+    padding: 1rem;
+}
+
+#controls {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2rem;
+    margin-right: 2rem;
+
+    gap: 5rem;
+}
+
+#ingredientDisplay {
+    display: flex;
+    flex-wrap: wrap;
+}

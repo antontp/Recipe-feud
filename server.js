@@ -1,3 +1,7 @@
+// Importing game-data processing functions
+const lib = require("./lib")
+const fetchData = lib.fetchData;
+
 // API urls
 const api_url_dish = 'https://www.themealdb.com/api/json/v1/1/random.php';
 const api_url_ingredients = 'https://www.themealdb.com/api/json/v1/1/list.php?i=list';
@@ -20,7 +24,6 @@ const dish = {}
 
 // State variables
 var gameState = "";
-var gameDataFetched = false;
 
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
@@ -35,50 +38,43 @@ fetchData(api_url_ingredients)
 );
 
 // Handle socket request from client
-const connections = [null, null];
+const connections = [];
 io.on("connection", socket => {
     console.log(`New socket connection:`);
 
     // Find available player spot
-    let playerIndex = null;
-    for (let i in connections) {
-        if (!connections[i]) {
-            playerIndex = i;
-            break;
-        }
+    var playerNum = null;
+    if (connections.length < 2) {
+        connections.push(connections.length);
+        // # 1 || # 2
+        playerNum = connections.length;
     }
-    // Notify client about player number
-    socket.emit("player-number", playerIndex);
-    console.log(`Player number # ${playerIndex} connected`);
-    // Ignore future connections if lobby full
-    if (!playerIndex) return;
-    // Fill player space
-    connections[playerIndex] = true;
 
+    console.log(connections);
+
+    // Notify client about player spot
+    socket.emit("game-spot", playerNum);
+
+    // Ignore future connections if lobby full
+    if (!playerNum) {
+        console.log(`(sending a player away...)`);
+        return;
+    }
+    console.log(`Player # ${playerNum} connected`);
     // Send game data
     socket.emit("game-data", ingredients, dish);
+
+    // If the joining player is the last player
+    if (connections.length == 2) gameState = "full lobby";
+    else gameState = "waiting for players";
+
+    // Notify lobby of gameStates
+    io.emit("game-state", gameState);
+
+    // Handle disconnections
+    socket.on("disconnect", () => {
+        console.log(playerNum + " has diconnected");
+        connections.shift();
+        console.log(connections);
+    })
 });
-
-// Fetches data (promise => data)
-async function fetchData(api_url) {
-    return fetch(api_url)
-        .then(async (promise) => await promise.json())
-        .then((data) => data.meals)
-        .catch(error => console.log(error))
-}
-
-// // startup function
-// async function startup() {
-//     // Fetching ingredients
-//     const allIngredients = await fetchData(api_url_ingredients);
-//     postIngredients(allIngredients);
-//     console.log(allIngredients);
-//     // console.log(allIngredients.find(o => o.strIngredient == "Salmon"));
-
-//     // Fetching dish
-//     const dish = await fetchData(api_url_dish).then(data => data[0]);
-//     const dish_ingredients = filterIngredients(dish);
-//     postDish(dish);
-//     console.log(dish_ingredients);
-//     console.log(dish)
-// }

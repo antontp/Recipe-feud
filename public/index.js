@@ -1,97 +1,67 @@
+// Importing game-data processing functions
+// const lib = require("./lib");
+// const filterIngredients = lib.filterIngredients;
+// const postDish = lib.postDish;
+// const postIngredients = lib.postIngredients;
+
 // game data
 var ingredients = null;
 var dish = null;
 
 const feedbackEl = document.getElementById("feedback");
 const lobbyEl = document.getElementById("lobby");
+const joinButtonEl = document.getElementById("join");
+const gameEl = document.getElementById("game");
+const dishDisplayEl = document.getElementById("dishDisplay");
 const ingredientsDisplayEl = document.getElementById("ingredientsDisplay");
 
+// game variables
+var playerNum = -1;
+
 function startClient() {
-    console.log("Hello?");
+    console.log(" * -- CLIENT STARTING -- * ");
     const socket = io();
-    // Get player number from server
-    socket.on("player-number", playerNum => {
-        if (!playerNum) {
-            console.log("Hidden");
-            feedbackEl.innerHTML = ("No space, server full lah");
-            lobbyEl.style.display = "none";
+    // Get game spot from server
+    socket.on("game-spot", spot => {
+        if (!spot) {
+            console.log("NO SPOT: RETURNED");
+            feedbackEl.innerHTML = "No space, server full lah";
+            joinButtonEl.style.display = "none";
+            return;
         }
-        else console.log(`You got player number ${playerNum}`);
+        else {
+            console.log(`You got player a spot ${spot}`);
+        }
     });
 
     // Get game data from server
     socket.on("game-data", (serverIngredients, serverDish) => {
-        console.log(serverIngredients);
-        console.log(serverDish);
-        // ingredients = serverIngredients;
-        // dish = serverDish;
+        ingredients = serverIngredients;
+        dish = serverDish;
+        console.log(ingredients);
+        console.log(dish);
+        console.log(" -- GAME DATA LOADED!");
     });
-}
 
-// // Fetching DOM objects
-// const containerEl = document.getElementById("container");
-// const playerTurnEl = document.getElementById("playerTurn");
-// const dishDisplayEl = document.getElementById("dishDisplay");
-// const ingredientsDisplayEl = document.getElementById("ingredientsDisplay")
-
-// Fetches data (promise => data)
-async function fetchData(api_url) {
-    return fetch(api_url)
-        .then(async (promise) => await promise.json())
-        .then((data) => data.meals)
-        .catch(error => console.log(error))
-}
-
-// startup function
-async function startup() {
-    // Fetching ingredients
-    const allIngredients = await fetchData(api_url_ingredients);
-    postIngredients(allIngredients);
-    console.log(allIngredients);
-    // console.log(allIngredients.find(o => o.strIngredient == "Salmon"));
-
-    // Fetching dish
-    const dish = await fetchData(api_url_dish).then(data => data[0]);
-    const dish_ingredients = filterIngredients(dish);
-    // postDish(dish);
-    console.log(dish_ingredients);
-    console.log(dish)
-}
-
-// // Filters measures and ingredients
-// function filterIngredients(dish) {
-//     return Object.keys(dish)
-//         .filter(function (ingredient) {
-//             return ingredient.startsWith("strIngredient") && dish[ingredient];
-//         })
-//         .map(key => {
-//             return dish[key]
-//         })
-//         .sort();
-// }
-
-// function postDish(dish) {
-//     var nameEl = document.createElement("h1");
-//     nameEl.innerHTML = dish.strMeal;
-    
-//     var imageEl = document.createElement("img");
-//     imageEl.src = dish.strMealThumb;
-//     imageEl.width = 400;
-//     imageEl.height = 400;
-
-//     dishDisplayEl.appendChild(nameEl);
-//     dishDisplayEl.appendChild(imageEl);
-// }
-
-function postIngredients(ingredients) {
-    ingredients.forEach(ingredient => {        
-        let buttonEl = document.createElement("button");
-        buttonEl.id = "ingredientButton";
-        buttonEl.value = ingredient.strIngredient;
-        buttonEl.innerHTML = ingredient.strIngredient;
-        ingredientsDisplayEl.appendChild(buttonEl);
+    // Handle gameStates
+    socket.on("game-state", msg => {
+        console.log(` -- RECEIVED GAME-STATE ${msg}`);
+        switch(msg) {
+            case "waiting for players": loadLobby(); break;
+            // case "full lobby": loadGame(); break;
+            default: loadGame();
+        }
     })
 }
 
-// startup();
+function loadLobby() {
+    joinButtonEl.style.display = "none";
+    feedbackEl.innerHTML = "Looking for opponent!";
+}
 
+function loadGame() {
+    console.log(` -- LOAD GAME... -- `);
+    lobbyEl.style.display = "none";
+    gameEl.style.display = "flex";
+    postDish(dish);
+}

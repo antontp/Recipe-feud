@@ -10,14 +10,28 @@
         <!-- Loading Script -->
         <script src="/socket.io/socket.io.js"></script>
         <script src="index.js" defer></script>
+        <script src="lib.js" defer></script>
     </head>
     <body>
         <h1>Recipe Feud</h1>
         <div id="lobby">
             <!-- <button class="gameMode" id="host">Host game</button> -->
             <button class="gameMode" id="join" onClick="startClient()">Join game</button>
+            <h3 id="feedback"></h3>
         </div>
-        <h3 id="feedback"></h3>
-        <div id="ingredientsDisplay"></div>
+        <div style="display: none" id="game">
+            <div id="console">
+                <h2 id="numIngredients">Ingredients left: 4</h2>
+                <div>
+                    <h2 id="playerTurn">Turn: Player 1</h2>
+                </div>
+            </div>
+            <div id="controls">
+                <div id="dishDisplay"></div>
+                <div id="ingredientsDisplay">
+                    <h1>Pick a ingredient!</h1>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
