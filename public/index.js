@@ -29,6 +29,7 @@ var socket = null;
 // game variables
 var playerNum = -1;
 var otherPlayerNum = -1;
+// Score
 var score = 0;
 var otherScore = 0;
 
@@ -36,12 +37,11 @@ function startClient() {
     console.log(" * -- CLIENT STARTING -- * ");
     socket = io();
     // Get game spot from server
-    socket.on("game-spot", spot => {
+    socket.once("game-spot", spot => {
         if (!spot) {
             console.log("NO SPOT: RETURNED");
             feedbackEl.innerHTML = "No space, server full lah";
             joinButtonEl.style.display = "none";
-            return;
         }
         else {
             console.log(`You got player a spot ${spot}`);
@@ -53,7 +53,7 @@ function startClient() {
     });
 
     // Get game data from server
-    socket.on("game-data", (serverIngredients, serverDish) => {
+    socket.once("game-data", (serverIngredients, serverDish) => {
         ingredients = serverIngredients;
         dish = serverDish;
         // console.log(ingredients);
@@ -63,7 +63,7 @@ function startClient() {
 
     // Handle gameStates
     socket.on("game-state", msg => {
-        console.log(` -- RECEIVED GAME-STATE:\n ${msg}`);
+        console.log(` -- RECEIVED GAME-STATE: ${msg}`);
         switch(msg) {
             case "waiting for players": loadLobby(); break;
             case playerNum: myTurn(); break;
@@ -87,27 +87,39 @@ function loadGame() {
     ingredientButtons = document.querySelectorAll(".ingredientButton");
 }
 
+// Toggle buttons and change display
 function myTurn() {
     console.log("-- MY TURN!");
     ingredientButtons.forEach(button => button.disabled = false);
     playerTurnEl.innerHTML = `Turn: Player ${playerNum}`;
 }
-
 function notMyTurn() {
     console.log("-- NOT MY TURN");
-    // THIS DOESNT WORK
     ingredientButtons.forEach(button => button.disabled = true);
     playerTurnEl.innerHTML = `Turn: Player ${otherPlayerNum}`;
+
+    // Handle display if the other player answers right
+    socket.once("ingredient-answer", (playerNumber, answer) => {
+        if (otherPlayerNum == playerNumber)
+            console.log(`${otherPlayerNum} guessed and it was ${answer}!`);
+        if (otherPlayerNum == playerNumber && answer) {
+            otherScore++;
+            otherScoreEl.innerHTML = `Other: ${otherScore} points`;
+        }
+    });
 }
 
 function handleTurn(button) {
+    // Sending answer to Server
+    console.log(`(Sending ${button.value}) to SERVER)`);
     socket.emit("ingredient-guess", button.value);
-    socket.on("ingredient-answer", answer => {
-        console.log(`${button.value} was ${answer}!`);
-        if (answer) {
-            score++;
-            myScoreEl.innerHTML = `You: ${score}`;
-        }
-    })
-}
 
+    // Listen if the answer is right or wrong
+    socket.once("ingredient-answer", (playerNumber, answer) => {
+        console.log(`${playerNumber}: ${button.value} was ${answer}!`);
+        if (playerNumber == playerNum && answer) {
+            score++;
+            myScoreEl.innerHTML = `You: ${score} points`;
+        }
+    });
+}
