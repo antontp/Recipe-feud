@@ -1,6 +1,8 @@
-// Importing game-data processing functions
+// Importing game processing functions
 const lib = require("./server-lib");
 const fetchData = lib.fetchData;
+const filterIngredients = lib.filterIngredients;
+const changeTurn = lib.changeTurn;
 
 // API urls
 const api_url_dish = 'https://www.themealdb.com/api/json/v1/1/random.php';
@@ -21,9 +23,11 @@ const io = socketio(server);
 // Gamedata
 const ingredients = []
 const dish = {}
+const dishIngredients = []
 
 // State variables
 var gameState = "";
+var playerTurn = 1;
 
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
@@ -32,7 +36,11 @@ app.use(express.static(path.join(__dirname, "public")));
 fetchData(api_url_ingredients)
 .then(dataIngredients => ingredients.push(...dataIngredients))
 .then(() => fetchData(api_url_dish))
-.then(gameDish => Object.assign(dish, gameDish[0]))
+.then(gameDish => {
+    Object.assign(dish, gameDish[0]);
+    dishIngredients.push(...filterIngredients(gameDish[0]));
+    console.log(dishIngredients);
+})
 .finally(
     server.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 );
@@ -40,7 +48,7 @@ fetchData(api_url_ingredients)
 // Handle socket request from client
 const connections = [];
 io.on("connection", socket => {
-    console.log(`New socket connection:`);
+    console.log(`- New socket connection!`);
 
     // Find available player spot
     var playerNum = null;
@@ -50,6 +58,7 @@ io.on("connection", socket => {
         playerNum = connections.length;
     }
 
+    console.log("game-lobby: ");
     console.log(connections);
 
     // Notify client about player spot
@@ -77,4 +86,18 @@ io.on("connection", socket => {
         connections.shift();
         console.log(connections);
     })
+
+    // start game
+    if (gameState == "full lobby") {
+        console.log(`TURN: Player # ${playerTurn}`);
+        io.emit("game-state", playerTurn);
+    }
+
+    // Listen to player guess;
+    socket.on("ingredient-guess", guess => {
+        console.log(`player ${playerTurn} guessed ${guess}`);
+        io.emit("ingredient-answer", dishIngredients.includes(guess));
+        playerTurn = changeTurn()
+        io.emit("game-state", playerTurn);
+    });
 });

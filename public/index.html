@@ -10,7 +10,6 @@
         <!-- Loading Script -->
         <script src="/socket.io/socket.io.js"></script>
         <script src="index.js" defer></script>
-        <script src="server-lib.js" defer></script>
         <script src="lib.js" defer></script>
     </head>
     <body>
@@ -23,9 +22,12 @@
         <div style="display: none" id="game">
             <div id="console">
                 <h2 id="numIngredients">Ingredients left: 4</h2>
-                <div>
-                    <h2 id="playerTurn">Turn: Player 1</h2>
-                </div>
+                <h2 id="playerNum"></h2>
+                <h2 id="playerTurn">Turn: Player 1</h2>
+            </div>
+            <div id="score">
+                <h3 id="myScore">You: 0 points</h3>
+                <h3 id="otherScore">Other: 0 points</h3>
             </div>
             <div id="controls">
                 <div id="dishDisplay"></div>

@@ -6,4 +6,22 @@ async function fetchData(api_url) {
         .catch(error => console.log(error))
 }
 
-module.exports = { fetchData };
+// Filters measures and ingredients on dish
+function filterIngredients(dish) {
+    return Object.keys(dish)
+        .filter(function (ingredient) {
+            return ingredient.startsWith("strIngredient") && dish[ingredient];
+        })
+        .map(key => {
+            return dish[key].toLowerCase();
+        })
+        .sort(); 
+}
+
+// change player turn
+function changeTurn(currentPlayer) {
+    if (currentPlayer == 1) return 2;
+    else return 1;
+}
+
+module.exports = { fetchData, filterIngredients, changeTurn };

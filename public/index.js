@@ -7,20 +7,34 @@
 // game data
 var ingredients = null;
 var dish = null;
+var ingredientButtons = [];
 
 const feedbackEl = document.getElementById("feedback");
 const lobbyEl = document.getElementById("lobby");
 const joinButtonEl = document.getElementById("join");
+
 const gameEl = document.getElementById("game");
+const playerNumEl = document.getElementById("playerNum");
+const numIngredientsEl = document.getElementById("numIngredients");
+const playerTurnEl = document.getElementById("playerTurn");
+
+const myScoreEl = document.getElementById("myScore");
+const otherScoreEl = document.getElementById("otherScore");
+
 const dishDisplayEl = document.getElementById("dishDisplay");
 const ingredientsDisplayEl = document.getElementById("ingredientsDisplay");
 
+// connection
+var socket = null;
 // game variables
 var playerNum = -1;
+var otherPlayerNum = -1;
+var score = 0;
+var otherScore = 0;
 
 function startClient() {
     console.log(" * -- CLIENT STARTING -- * ");
-    const socket = io();
+    socket = io();
     // Get game spot from server
     socket.on("game-spot", spot => {
         if (!spot) {
@@ -31,6 +45,10 @@ function startClient() {
         }
         else {
             console.log(`You got player a spot ${spot}`);
+            playerNum = spot;
+            if (playerNum == 1) otherPlayerNum = 2;
+            else otherPlayerNum = 1;
+            playerNumEl.innerHTML = `You are player ${playerNum}`;
         }
     });
 
@@ -38,18 +56,19 @@ function startClient() {
     socket.on("game-data", (serverIngredients, serverDish) => {
         ingredients = serverIngredients;
         dish = serverDish;
-        console.log(ingredients);
-        console.log(dish);
+        // console.log(ingredients);
+        // console.log(dish);
         console.log(" -- GAME DATA LOADED!");
     });
 
     // Handle gameStates
     socket.on("game-state", msg => {
-        console.log(` -- RECEIVED GAME-STATE ${msg}`);
+        console.log(` -- RECEIVED GAME-STATE:\n ${msg}`);
         switch(msg) {
             case "waiting for players": loadLobby(); break;
-            // case "full lobby": loadGame(); break;
-            default: loadGame();
+            case playerNum: myTurn(); break;
+            case "full lobby": loadGame(); break;
+            default: notMyTurn();
         }
     })
 }
@@ -62,6 +81,33 @@ function loadLobby() {
 function loadGame() {
     console.log(` -- LOAD GAME... -- `);
     lobbyEl.style.display = "none";
-    gameEl.style.display = "flex";
+    gameEl.style.display = "block";
     postDish(dish);
+    postIngredients(ingredients);
+    ingredientButtons = document.querySelectorAll(".ingredientButton");
 }
+
+function myTurn() {
+    console.log("-- MY TURN!");
+    ingredientButtons.forEach(button => button.disabled = false);
+    playerTurnEl.innerHTML = `Turn: Player ${playerNum}`;
+}
+
+function notMyTurn() {
+    console.log("-- NOT MY TURN");
+    // THIS DOESNT WORK
+    ingredientButtons.forEach(button => button.disabled = true);
+    playerTurnEl.innerHTML = `Turn: Player ${otherPlayerNum}`;
+}
+
+function handleTurn(button) {
+    socket.emit("ingredient-guess", button.value);
+    socket.on("ingredient-answer", answer => {
+        console.log(`${button.value} was ${answer}!`);
+        if (answer) {
+            score++;
+            myScoreEl.innerHTML = `You: ${score}`;
+        }
+    })
+}
+

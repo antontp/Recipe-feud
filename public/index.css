@@ -25,8 +25,14 @@ body {
 }
 
 #game {
+    border: yellow solid 2px;
+}
+
+#console {
+    display: flex;
     justify-content: space-between;
     align-items: center;
+    border: red solid 2px;
 }
 
 #playerTurn {
@@ -37,13 +43,30 @@ body {
 #controls {
     display: flex;
     flex-direction: column;
-    margin-left: 2rem;
-    margin-right: 2rem;
 
     gap: 5rem;
+
+    border: 2px solid orange;
 }
 
 #ingredientDisplay {
     display: flex;
     flex-wrap: wrap;
+}
+
+.ingredientButton {
+    color:rgb(96, 96, 96);
+    
+    padding: 1rem;
+    border-radius: 20px;
+
+    text-align: justify;
+    justify-content: center;
+
+    font-weight: bold;
+}
+
+.ingredientButton:hover {
+    background-color: bisque;
+    color: #354259;
 }
