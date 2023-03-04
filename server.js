@@ -71,7 +71,7 @@ io.on("connection", socket => {
     }
     console.log(`Player # ${playerNum} connected`);
     // Send game data
-    socket.emit("game-data", ingredients, dish);
+    socket.emit("game-data", ingredients, dish, dishIngredients.length);
 
     // If the joining player is the last player
     if (connections.length == 2) gameState = "full lobby";
@@ -100,9 +100,11 @@ io.on("connection", socket => {
         io.emit("ingredient-answer", playerTurn, dishIngredients.includes(guess));
 
         // Removes ingredient from the ingredient dish list if correct
-        if (dishIngredients.includes(guess))
+        if (dishIngredients.includes(guess)) {
             dishIngredients.splice(dishIngredients.indexOf(guess), 1);
-            
+            io.emit("ingredients-left", dishIngredients.length);
+        }
+
         // Change player turn
         playerTurn = changeTurn(playerTurn);
         console.log(`TURN: Player # ${playerTurn}`);

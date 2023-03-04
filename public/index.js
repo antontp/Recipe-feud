@@ -53,11 +53,10 @@ function startClient() {
     });
 
     // Get game data from server
-    socket.once("game-data", (serverIngredients, serverDish) => {
+    socket.once("game-data", (serverIngredients, serverDish, ingredientsLeft) => {
         ingredients = serverIngredients;
         dish = serverDish;
-        // console.log(ingredients);
-        // console.log(dish);
+        numIngredientsEl.innerHTML = `Ingredients left: ${ingredientsLeft}`;
         console.log(" -- GAME DATA LOADED!");
     });
 
@@ -70,7 +69,13 @@ function startClient() {
             case "full lobby": loadGame(); break;
             default: notMyTurn();
         }
-    })
+    });
+
+    // Listen to ingredients left from server
+    socket.on("ingredients-left", num => {
+        numIngredientsEl.innerHTML = `Ingredients left: ${num}`;
+    });
+
 }
 
 function loadLobby() {
