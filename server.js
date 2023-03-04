@@ -1,5 +1,5 @@
 // Importing game-data processing functions
-const lib = require("./lib")
+const lib = require("./server-lib");
 const fetchData = lib.fetchData;
 
 // API urls

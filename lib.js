@@ -1,9 +1,34 @@
-// Fetches data (promise => data)
-async function fetchData(api_url) {
-    return fetch(api_url)
-        .then(async (promise) => await promise.json())
-        .then((data) => data.meals)
-        .catch(error => console.log(error))
+// Filters measures and ingredients on dish
+function filterIngredients(dish) {
+    return Object.keys(dish)
+        .filter(function (ingredient) {
+            return ingredient.startsWith("strIngredient") && dish[ingredient];
+        })
+        .map(key => {
+            return dish[key]
+        })
+        .sort(); 
 }
 
-module.exports = { fetchData };
+function postDish(dish) {
+    var nameEl = document.createElement("h1");
+    nameEl.innerHTML = dish.strMeal;
+    
+    var imageEl = document.createElement("img");
+    imageEl.src = dish.strMealThumb;
+    imageEl.width = 400;
+    imageEl.height = 400;
+
+    dishDisplayEl.appendChild(nameEl);
+    dishDisplayEl.appendChild(imageEl);
+}
+
+function postIngredients(ingredients) {
+    ingredients.forEach(ingredient => {        
+        let buttonEl = document.createElement("button");
+        buttonEl.id = "ingredientButton";
+        buttonEl.value = ingredient.strIngredient;
+        buttonEl.innerHTML = ingredient.strIngredient;
+        ingredientsDisplayEl.appendChild(buttonEl);
+    })
+}
