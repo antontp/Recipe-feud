@@ -14,7 +14,6 @@ const lobbyEl = document.getElementById("lobby");
 const joinButtonEl = document.getElementById("join");
 
 const gameEl = document.getElementById("game");
-const playerNumEl = document.getElementById("playerNum");
 const numIngredientsEl = document.getElementById("numIngredients");
 const playerTurnEl = document.getElementById("playerTurn");
 
@@ -48,7 +47,6 @@ function startClient() {
             playerNum = spot;
             if (playerNum == 1) otherPlayerNum = 2;
             else otherPlayerNum = 1;
-            playerNumEl.innerHTML = `You are player ${playerNum}`;
         }
     });
 
@@ -96,12 +94,12 @@ function loadGame() {
 function myTurn() {
     console.log("-- MY TURN!");
     ingredientButtons.forEach(button => button.disabled = false);
-    playerTurnEl.innerHTML = `Turn: Player ${playerNum}`;
+    playerTurnEl.innerHTML = `It's your turn!`;
 }
 function notMyTurn() {
     console.log("-- NOT MY TURN");
     ingredientButtons.forEach(button => button.disabled = true);
-    playerTurnEl.innerHTML = `Turn: Player ${otherPlayerNum}`;
+    playerTurnEl.innerHTML = `Waiting for the other player`;
 
     // Handle display if the other player answers right
     socket.once("ingredient-answer", (playerNumber, answer, guess) => {

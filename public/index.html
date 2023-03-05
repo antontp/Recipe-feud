@@ -13,26 +13,25 @@
         <script src="lib.js" defer></script>
     </head>
     <body>
-        <h1>Recipe Feud</h1>
+        <h1>Recipe Feud!</h1>
         <div id="lobby">
-            <!-- <button class="gameMode" id="host">Host game</button> -->
+            <!-- <button class="gameMode" id="host" disabled>Host game</button> -->
             <button class="gameMode" id="join" onClick="startClient()">Join game</button>
             <h3 id="feedback"></h3>
         </div>
         <div style="display: none" id="game">
-            <div id="console">
-                <h2 id="numIngredients">Ingredients left: 4</h2>
-                <h2 id="playerNum"></h2>
-                <h2 id="playerTurn">Turn: Player 1</h2>
-            </div>
             <div id="score">
                 <h3 id="myScore">You: 0 points</h3>
                 <h3 id="otherScore">Other: 0 points</h3>
             </div>
             <div id="controls">
                 <div id="dishDisplay"></div>
+                <div id="console">
+                    <h2 class="consoleItem" id="numIngredients">Ingredients left: 4</h2>
+                    <!-- <h2 class="consoleItem" id="playerNum"></h2> -->
+                    <h2 class="consoleItem" id="playerTurn">Turn: Player 1</h2>
+                </div>
                 <div id="ingredientsDisplay">
-                    <h1>Pick a ingredient!</h1>
                 </div>
             </div>
         </div>

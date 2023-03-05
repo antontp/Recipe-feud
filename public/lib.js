@@ -12,6 +12,7 @@ function postDish(dish) {
 }
 
 function postIngredients(ingredients) {
+    console.log(ingredients);
     ingredients.forEach(ingredient => {        
         let buttonEl = document.createElement("button");
         buttonEl.classList.add("ingredientButton");

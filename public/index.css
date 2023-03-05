@@ -24,28 +24,41 @@ body {
     color: black;
 }
 
-#game {
-}
+/* #game {
+} */
 
 #console {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: red solid 2px;
 }
 
-#playerTurn {
-    border: bisque solid 2px;
-    padding: 1rem;
+.consoleItem {
+    background-color: bisque;
+    color: #354259;
+    border-radius: 30px;
+    padding: 1.5rem;
 }
 
 #controls {
     display: flex;
     flex-direction: column;
+}
 
-    gap: 5rem;
+#score, #score h3{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 
-    border: 2px solid orange;
+    background-color: bisque;
+    color: #354259;
+    font-size: x-large;
+    border-radius: 30px;
+}
+
+#dishDisplay {
+    /* border: red solid 2px; */
+    /* padding: 1rem; */
 }
 
 #ingredientDisplay {
