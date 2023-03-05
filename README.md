@@ -15,6 +15,12 @@ Socket.io | 4.6.1
 #### DevDependencies
 Nodemon (2.0.20)
 
+## Available scripts:
+```
+$ npm run start
+$ npm run dev
+```
+
 ## API Source
 [Source](https://www.themealdb.com/)
 
