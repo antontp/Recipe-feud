@@ -1,4 +1,6 @@
 // Fetches data (promise => data)
+const fetch = require("node-fetch");
+
 async function fetchData(api_url) {
     return fetch(api_url)
         .then(async (promise) => await promise.json())

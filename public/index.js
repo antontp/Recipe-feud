@@ -1,9 +1,3 @@
-// Importing game-data processing functions
-// const lib = require("./lib");
-// const filterIngredients = lib.filterIngredients;
-// const postDish = lib.postDish;
-// const postIngredients = lib.postIngredients;
-
 // game data
 var ingredients = null;
 var dish = null;
@@ -105,16 +99,14 @@ function notMyTurn() {
     socket.once("ingredient-answer", (playerNumber, answer, guess) => {
         if (otherPlayerNum == playerNumber)
             console.log(`${otherPlayerNum} guessed and it was ${answer}!`);
-
         if (otherPlayerNum == playerNumber && answer) {
             otherScore++;
             otherScoreEl.innerHTML = `Other: ${otherScore} points`;
-            
-            // Removing used button
-            ingredientButtons.forEach(button => {
-                if (button.value == guess) button.remove();
-            })
         }
+        // Removing used button
+        ingredientButtons.forEach(button => {
+            if (button.value == guess) button.remove();
+        })
     });
 }
 
@@ -129,8 +121,8 @@ function handleTurn(button) {
         if (playerNumber == playerNum && answer) {
             score++;
             myScoreEl.innerHTML = `You: ${score} points`;
-            // Removing used button
-            button.remove();
         }
+        // Removing used button
+        button.remove();
     });
 }
