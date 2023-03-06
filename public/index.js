@@ -14,8 +14,12 @@ const playerTurnEl = document.getElementById("playerTurn");
 const myScoreEl = document.getElementById("myScore");
 const otherScoreEl = document.getElementById("otherScore");
 
+const controlsEl = document.getElementById("controls");
 const dishDisplayEl = document.getElementById("dishDisplay");
 const ingredientsDisplayEl = document.getElementById("ingredientsDisplay");
+
+const minEl = document.getElementById("min");
+const secEl = document.getElementById("sec");
 
 // connection
 var socket = null;
@@ -25,6 +29,11 @@ var otherPlayerNum = -1;
 // Score
 var score = 0;
 var otherScore = 0;
+
+// Timer (Starts with 5 minutes each)
+var min = 5;
+var sec = 0;
+var timer = null;
 
 function startClient() {
     console.log(" * -- CLIENT STARTING -- * ");
@@ -57,8 +66,11 @@ function startClient() {
         console.log(` -- RECEIVED GAME-STATE: ${msg}`);
         switch(msg) {
             case "waiting for players": loadLobby(); break;
-            case playerNum: myTurn(); break;
             case "full lobby": loadGame(); break;
+            case "end": endGame(0); break;
+            case playerNum: myTurn(); break;
+            case (-1 * playerNum): endGame(-1*playerNum); break;
+            case (-1 * otherPlayerNum): endGame(-1*otherPlayerNum); break;
             default: notMyTurn();
         }
     });
@@ -82,6 +94,9 @@ function loadGame() {
     postDish(dish);
     postIngredients(ingredients);
     ingredientButtons = document.querySelectorAll(".ingredientButton");
+
+    minEl.innerHTML = padZero(min);
+    secEl.innerHTML = padZero(sec);
 }
 
 // Toggle buttons and change display
@@ -89,9 +104,22 @@ function myTurn() {
     console.log("-- MY TURN!");
     ingredientButtons.forEach(button => button.disabled = false);
     playerTurnEl.innerHTML = `It's your turn!`;
+
+    // start timer
+    timer = setInterval(() => {
+        if (!min && !sec) socket.emit("timer", playerNum);
+        else if (!sec) {
+            min--;
+            sec = 60;
+        }
+        if (sec) sec--;
+        minEl.innerHTML = padZero(min);
+        secEl.innerHTML = padZero(sec);
+    }, 1000);
 }
 function notMyTurn() {
     console.log("-- NOT MY TURN");
+    clearInterval(timer);
     ingredientButtons.forEach(button => button.disabled = true);
     playerTurnEl.innerHTML = `Waiting for the other player`;
 
@@ -111,6 +139,7 @@ function notMyTurn() {
 }
 
 function handleTurn(button) {
+
     // Sending answer to Server
     console.log(`(Sending ${button.value}) to SERVER)`);
     socket.emit("ingredient-guess", button.value);
@@ -125,4 +154,21 @@ function handleTurn(button) {
         // Removing used button
         button.remove();
     });
+}
+
+function endGame(type) {
+    // close socket
+    socket.close()
+    // Removing game and displaying end game message
+    controlsEl.style.display = "none";
+    let endMessageEl = document.createElement("h2");
+
+    if (type) {
+        if (!(type+playerNum)) endMessageEl.innerHTML = `Timer out: You lost!`;
+        else endMessageEl.innerHTML = `Other player's timer out: You win!`;
+    }
+    else if (score > otherScore) endMessageEl.innerHTML = `You won!`;
+    else if (otherScore > score) endMessageEl.innerHTML = `You lost!`;
+    else endMessageEl.innerHTML = `Draw!`;
+    gameEl.appendChild(endMessageEl);
 }

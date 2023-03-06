@@ -24,16 +24,13 @@ body {
     color: black;
 }
 
-/* #game {
-} */
-
 #console {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.consoleItem {
+.consoleItem, .consoleItem span{
     background-color: bisque;
     color: #354259;
     border-radius: 30px;

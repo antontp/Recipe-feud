@@ -22,3 +22,9 @@ function postIngredients(ingredients) {
         ingredientsDisplayEl.appendChild(buttonEl);
     })
 }
+
+// timer functions
+function padZero(number) {
+    if (number < 10) return `0${number}`;
+    else return number;
+}

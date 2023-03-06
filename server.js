@@ -105,11 +105,28 @@ io.on("connection", socket => {
             io.emit("ingredients-left", dishIngredients.length);
 
             // Check if there is ingredients left; if not => end game show results
-        }
+            if (!dishIngredients.length) {
+                gameState = "end";
+                io.emit("game-state", gameState);
 
+                // Shut down server
+                console.log("..Server shutdown..")
+                io.disconnectSockets();
+                io.close();
+            }
+        }
         // Change player turn
         playerTurn = changeTurn(playerTurn);
         console.log(`TURN: Player # ${playerTurn}`);
         io.emit("game-state", playerTurn);
+    });
+
+    // Listen for timer (playerNum who timer went out)
+    socket.once("timer", player => {
+        io.emit("game-state", (-1*player));
+        // Shut down server
+        console.log("..Server shutdown..")
+        io.disconnectSockets();
+        io.close();
     });
 });
