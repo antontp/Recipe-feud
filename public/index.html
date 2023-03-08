@@ -15,6 +15,15 @@
     <body>
         <h1>Recipe Feud!</h1>
         <div id="lobby">
+            <div>
+                <h2>Game rules:</h2>
+                <p>
+                    There are two players. A dish is randomly chosen.
+                    Each player has to take turns listing all the ingredients the chosen dish contains.
+                    The player who guesses the most ingredients within the their respective timer wins!
+                </p>
+                <p>Hot tip! You can use CTRL + F to search for ingredients!</p>
+            </div>
             <!-- <button class="gameMode" id="host" disabled>Host game</button> -->
             <button class="gameMode" id="join" onClick="startClient()">Join game</button>
             <h3 id="feedback"></h3>
@@ -32,10 +41,10 @@
                         <span id="min"></span>:<span id="sec"></span>
                     </h2>
                     <!-- <h2 class="consoleItem" id="playerNum"></h2> -->
-                    <h2 class="consoleItem" id="playerTurn">Turn: Player 1</h2>
+                    <h2 class="consoleItem" id="playerTurn">It's your turn!</h2>
                 </div>
-                <div id="ingredientsDisplay">
-                </div>
+                <h2 class="consoleItem" id="gameFeedback"></h2>
+                <div id="ingredientsDisplay"></div>
             </div>
         </div>
     </body>

@@ -14,6 +14,8 @@ const playerTurnEl = document.getElementById("playerTurn");
 const myScoreEl = document.getElementById("myScore");
 const otherScoreEl = document.getElementById("otherScore");
 
+const gameFeedbackEl = document.getElementById("gameFeedback");
+
 const controlsEl = document.getElementById("controls");
 const dishDisplayEl = document.getElementById("dishDisplay");
 const ingredientsDisplayEl = document.getElementById("ingredientsDisplay");
@@ -79,7 +81,6 @@ function startClient() {
     socket.on("ingredients-left", num => {
         numIngredientsEl.innerHTML = `Ingredients left: ${num}`;
     });
-
 }
 
 function loadLobby() {
@@ -147,9 +148,16 @@ function handleTurn(button) {
     // Listen if the answer is right or wrong
     socket.once("ingredient-answer", (playerNumber, answer, guess) => {
         console.log(`${playerNumber}: ${button.value} was ${answer}!`);
+        // alert(`${playerNumber}: ${button.value} was ${answer}!`)
         if (playerNumber == playerNum && answer) {
             score++;
             myScoreEl.innerHTML = `You: ${score} points`;
+            gameFeedbackEl.innerHTML = `${guess} was right!`;
+            gameFeedbackEl.style.color = "green";
+        }
+        else {
+            gameFeedbackEl.innerHTML = `${guess} was wrong!`;
+            gameFeedbackEl.style.color = "red";
         }
         // Removing used button
         button.remove();
