@@ -24,6 +24,18 @@ $ npm run dev
 ## API Source
 [Source](https://www.themealdb.com/)
 
+---
+
+# Storyboard
+
+Background (My motivation) | Data (Player Data) | Problem Statement (What does the game do?) |
+-|-|-|
+Something | Something | Something
+
+
+Analysis | Recommendation | Findings
+-|-|-|
+Something | Something | Something
 
 
 
