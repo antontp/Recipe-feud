@@ -39,7 +39,7 @@ var timer = null;
 
 function startClient() {
     console.log(" * -- CLIENT STARTING -- * ");
-    socket = io("159.65.129.190:3000");
+    socket = io("http://159.65.129.190:3000", { transports: ['websocket', 'polling', 'flashsocket'] });
     // Get game spot from server
     socket.once("game-spot", spot => {
         if (!spot) {
