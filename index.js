@@ -39,7 +39,7 @@ var timer = null;
 
 function startClient() {
     console.log(" * -- CLIENT STARTING -- * ");
-    socket = io();
+    socket = io("159.65.129.190:3000");
     // Get game spot from server
     socket.once("game-spot", spot => {
         if (!spot) {
