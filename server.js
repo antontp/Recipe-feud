@@ -30,7 +30,7 @@ var gameState = "";
 var playerTurn = 1;
 
 // Set static folder
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
 
 // Fetches game data and starts server
 fetchData(api_url_ingredients)
