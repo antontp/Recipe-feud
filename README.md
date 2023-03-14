@@ -28,13 +28,28 @@ $ npm run dev
 
 # Storyboard
 
-Background (My motivation) | Data (Player Data) | Problem Statement (What does the game do?) |
--|-|-|
-Something | Something | Something
-
-Analysis | Recommendation | Findings
--|-|-|
-Something | Something | Something
+<table>
+    <tr>
+        <th>Background (My motivation)</th>
+        <th>Data (Player Data)</th>
+        <th>Problem Statement (What does the game do?)</th>
+    </tr>
+    <tr>
+        <td>Since I had some practice of coding, I wanted a challenge and also refresh some Javascript knowledge</td>
+        <td>The client keeps track of player scores and the time. The server keeps track of game state, all and the right ingredients and the chosen dish.</td>
+        <td>The game challenges two players against eachother to a Recipe-feud. Both players competes about who knows the recipe the most. </td>
+    </tr>
+    <tr>
+        <th>Analysis</th>
+        <th>Recommendation</th>
+        <th>Findings</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
 
 
 
