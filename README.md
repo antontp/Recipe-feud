@@ -32,7 +32,6 @@ Background (My motivation) | Data (Player Data) | Problem Statement (What does t
 -|-|-|
 Something | Something | Something
 
-
 Analysis | Recommendation | Findings
 -|-|-|
 Something | Something | Something
