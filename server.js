@@ -22,12 +22,8 @@ const { Server } = require("socket.io");
 // https://nm2207.online/apps/AntonTinPhan-nm2207.github.io/index.html
 const io = new Server(httpServer, {
   cors: {
-    origin: [
-      "https://antontinphan-nm2207.github.io/",
-      "http://127.0.0.1:8080/",
-      "http://localhost:8000/",
-    ],
-    credentials: true,
+    origin: "*",
+    //credentials: true,
   },
 });
 

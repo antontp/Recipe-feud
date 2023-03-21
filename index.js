@@ -40,7 +40,7 @@ var timer = null;
 function startClient() {
   console.log(" * -- CLIENT STARTING -- * ");
   // socket = io("http://159.65.129.190:3000", { transports: ['websocket'] });
-  socket = io("https://nm2207.online", { transports: ["websocket"] });
+  socket = io("http://localhost:3000/");
   socket.emit("chat message", "hello world");
   // Get game spot from server
   socket.once("game-spot", (spot) => {
