@@ -49,10 +49,6 @@ $ npm run dev
         <td>Keeping game data</td>
     </tr>
     <tr>
-        <td>Collections (Arrays, dictionaries)</td>
-        <td>Keeping game data</td>
-    </tr>
-    <tr>
         <td>Fetch API</td>
         <td>Fetching game data</td>
     </tr>
