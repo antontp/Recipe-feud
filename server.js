@@ -17,15 +17,19 @@ const http = require("http");
 // Init server and socket
 const PORT = 3000;
 const app = express();
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
+const { Server } = require("socket.io");
 // https://nm2207.online/apps/AntonTinPhan-nm2207.github.io/index.html
-const socketio = require("socket.io", (server,
-{
+const io = new Server(httpServer, {
   cors: {
-    origin: "*",
+    origin: [
+      "https://antontinphan-nm2207.github.io/",
+      "http://127.0.0.1:8080/",
+      "http://localhost:8000/",
+    ],
+    credentials: true,
   },
-}));
-const io = socketio(server);
+});
 
 // Gamedata
 const ingredients = [];
@@ -49,8 +53,13 @@ fetchData(api_url_ingredients)
     console.log(dishIngredients);
   })
   .finally(
-    server.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+    httpServer.listen(PORT, () => console.log(`Server running on port ${PORT}`))
   );
+
+// test GET request
+app.get("/", (req, res) => {
+  res.send("<h1>Hello world</h1>");
+});
 
 // Handle socket request from client
 const connections = [];
