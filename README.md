@@ -27,15 +27,44 @@ $ npm run dev
 ---
 
 # List of concepts
-- HTML and CSS
-- Variables, conditionals and functions
-- DOM
-- Collections (Arrays, dictionaries)
-- JSON / Objects
-- Dataset
-- fetch API
-- Socket.IO
-- Server Client with Express
+<table>
+    <tr>
+        <th>Concept</th>
+        <th>Application</th>
+    </tr>
+    <tr>
+        <td>HTML and CSS</td>
+        <td>Website</td>
+    </tr>
+    <tr>
+        <td>Variables, conditionals and functions</td>
+        <td>Keeping game state, game logic and game flow</td>
+    </tr>
+    <tr>
+        <td>Doucment Object Model</td>
+        <td>User input, user output and game flow</td>
+    </tr>
+    <tr>
+        <td>Collections (Arrays, dictionaries)</td>
+        <td>Keeping game data</td>
+    </tr>
+    <tr>
+        <td>Collections (Arrays, dictionaries)</td>
+        <td>Keeping game data</td>
+    </tr>
+    <tr>
+        <td>Fetch API</td>
+        <td>Fetching game data</td>
+    </tr>
+    <tr>
+        <td>Socket.IO</td>
+        <td>Server and client communication</td>
+    </tr>
+    <tr>
+        <td>Express.js</td>
+        <td>Server hosting</td>
+    </tr>
+</table>
 
 # Storyboard
 
