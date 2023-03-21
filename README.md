@@ -26,6 +26,17 @@ $ npm run dev
 
 ---
 
+# List of concepts
+- HTML and CSS
+- Variables, conditionals and functions
+- DOM
+- Collections (Arrays, dictionaries)
+- JSON / Objects
+- Dataset
+- fetch API
+- Socket.IO
+- Server Client with Express
+
 # Storyboard
 
 <table>
