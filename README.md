@@ -1,4 +1,4 @@
-# Recipe Feud! By Anton
+# Recipe Feud!
 
 ## Description
 There are two players. A dish is randomly chosen. Each player has to take turns listing all the ingredients the chosen dish contains.
